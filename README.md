@@ -3,10 +3,19 @@ Repository for EE3-24 Embedded Systems Coursework 1
 
 ## Prequisites for the coursework
 
-## ESP8266 WiFi Microcontroller
+### ESP8266 WiFi Microcontroller
 Datasheet for the microcontroller can be found [here](http://download.arduino.org/products/UNOWIFI/0A-ESP8266-Datasheet-EN-v4.3.pdf).
 
-## I<sup>2</sup>C Interface
-
-## Installing Micropython interpreter (ampy)
+### Installing Micropython interpreter (ampy)
 Instructions for installing ampy can be found [here](https://github.com/adafruit/ampy).  
+
+### I<sup>2</sup>C Interface
+Refer to lecture 2 slides for specifics details of the interface. Most importantly, ensure that SCLK and SDA pins are connected correctly onto the mbed. 
+
+## Architecture
+
+### Designated Sensor
+
+### Embed
+
+### Interaction with server via WiFi
