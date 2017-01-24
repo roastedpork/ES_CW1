@@ -11,20 +11,20 @@ You need to setup an RSA key to be able to SSH into the git repository.
 Alternatively, you can clone the repository via HTTPS, which requires you so fill in your login details everytime you push something in.
 
 #### Basic setup for Git 
-`
+```
 sudo apt-get install git
 
 git clone https://github.com/roastedpork/ES_CW1.git
-`
+```
 
 #### Commiting to Git
-`
+```
 git add --all
 
 git commit -m "<insert your message here>"
 
 git push
-`
+```
 
 ### ESP8266 WiFi Microcontroller
 Datasheet for the microcontroller can be found [here](http://download.arduino.org/products/UNOWIFI/0A-ESP8266-Datasheet-EN-v4.3.pdf). 
