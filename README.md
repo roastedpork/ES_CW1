@@ -13,16 +13,13 @@ Alternatively, you can clone the repository via HTTPS, which requires you so fil
 #### Basic setup for Git 
 ```
 sudo apt-get install git
-
 git clone https://github.com/roastedpork/ES_CW1.git
 ```
 
 #### Commiting to Git
 ```
 git add --all
-
 git commit -m "<insert your message here>"
-
 git push
 ```
 
