@@ -42,5 +42,5 @@ Most importantly, ensure that SCLK and SDA pins are connected correctly onto the
 ### Designated Sensor
 
 ### Interaction with server via WiFis using MQTT
-The documentation for MQTT can be found [here]9https://github.com/mqtt/mqtt.github.io). 
+The documentation for MQTT can be found [here](https://github.com/mqtt/mqtt.github.io). 
 This should be used as a basic message passing interface on top of the WiFi hardware.
