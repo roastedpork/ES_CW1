@@ -54,3 +54,12 @@ VNCL 4010 Datasheet
 ### Interaction with server via WiFis using MQTT
 The documentation for MQTT can be found [here](https://github.com/mqtt/mqtt.github.io). 
 This should be used as a basic message passing interface on top of the WiFi hardware.
+
+### Windows Setup
+General setup documentation can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
+
+To setup Micropython Read-Evaluate-Print Loop (REPL) can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/serial-terminal) 
+
+Drivers to install for windows for ESP8226 can be found [here] (https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx)
+
+Ampy failure troubleshoot can be found [here] (https://forum.micropython.org/viewtopic.php?t=2702) 
