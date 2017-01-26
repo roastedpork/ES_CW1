@@ -10,18 +10,25 @@ class Sensor:
 		self.LED_CONFIG = 0x83 		# LED used to measure proximity 
 		self.LIGHT_CONFIG = 0x84	# Ambient light measurement parameters
 		self.DATA_ADD = 0x85
-		self.LIGHT_ADD = 0x85		# 0x85 and 0x86 are MSB and LSB of light reading, big endian 	
-		self.PROX_ADD = 0x87		# 0x87 and 0x88 are MSB and LSB of proximity reading, big endian
-
+		# self.LIGHT_ADD = 0x85		# 0x85 and 0x86 are MSB and LSB of light reading, big endian 	
+		# self.PROX_ADD = 0x87		# 0x87 and 0x88 are MSB and LSB of proximity reading, big endian
+		self.IRQ_CTRL = 0x89
 		self.sensor.writeto_mem(self.ID, self.PROX_CONFIG, str(0x00).encode())
 		self.sensor.writeto_mem(self.ID, self.LIGHT_CONFIG, str(0x9D).encode())
+		self.sensor.writeto_mem(self.ID, self.IRQ_CTRL, str(0x02).encode())
 
 		self.reading = None
+
+		self.first_read = True
 
 	def read(self):
 		buf = str(0xff).encode()
 		self.sensor.writeto_mem(self.ID, self.CMD_REG, buf)
 
+		if self.first_read:
+			time.sleep_us(1470)
+			self.first_read = False
+			
 		combined = self.sensor.readfrom_mem(self.ID, self.DATA_ADD,4)
 		self.reading = bytearray(combined)
 
