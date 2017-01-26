@@ -38,8 +38,12 @@ Most importantly, ensure that SCLK and SDA pins are connected correctly onto the
 ## Architecture
 
 ### Embed
+Adafruit Feather HUZZAH ESP8266
+
 
 ### Designated Sensor
+
+![Figure1-1 Embed Pinout](images/adafruit_products_pinbottom.jpg)
 
 ### Interaction with server via WiFis using MQTT
 The documentation for MQTT can be found [here](https://github.com/mqtt/mqtt.github.io). 
