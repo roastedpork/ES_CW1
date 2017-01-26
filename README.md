@@ -1,6 +1,15 @@
 # ES_CW1
 Repository for EE3-24 Embedded Systems Coursework 1
 
+
+## Current List of To Dos
+
++ ~~Figure out how to interface the embed~~
++ ~~Figure out how to get the embed to communicate with the sensor~~
++ Get proper raw measurements from the sensor
++ Convert raw data into a form that makes sense
++ Design an IoT application for the sensor
+
 ## Prequisites for the coursework
 
 ### Windows Setup
@@ -62,7 +71,8 @@ Adafruit Feather HUZZAH ESP8266
 ![Figure1-1 Embed Pinout](images/adafruit_products_pinbottom.jpg)
 
 ### Designated Sensor
-VNCL 4010 Datasheet
+
+A Sensor class for the Light and Proximity Sensor was created in vcnl4010.py, that is able to convert the reading from the sensor into a raw integer value.
 
 ### Interaction with server via WiFis using MQTT
 The documentation for MQTT can be found [here](https://github.com/mqtt/mqtt.github.io). 
