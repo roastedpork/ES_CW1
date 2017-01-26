@@ -3,7 +3,7 @@ Repository for EE3-24 Embedded Systems Coursework 1
 
 ## Prequisites for the coursework
 
-### OS for Shell Terminal
+### Windows Setup
 
 ~~Install [Bash on Windows](http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/), or dual-boot a Linux VM for this coursework.~~
 
@@ -11,6 +11,20 @@ So apparently there is an issue with Bash on Windows with regards to connecting 
 Follow the instructions [here](https://learn.adafruit.com/adafruit-feather-huzzah-esp8266/overview) for windows machines.
 
 Install python 2.7/3.6 for Windows, and install PuTTY in order to access the serial port.
+
+General setup documentation can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
+
+To setup Micropython Read-Evaluate-Print Loop (REPL) can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/serial-terminal) 
+
+Drivers to install for windows for ESP8226 can be found [here] (https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx)
+
+Ampy failure troubleshoot can be found [here] (https://forum.micropython.org/viewtopic.php?t=2702) 
+
+In summary:
++ Python - To install relevant micropython packages
++ Serial driver - To allow PuTTY to work later on
++ PuTTY - To get a real-time output from the embed
++ ampy - File manager for the embed which can be accessed via Windows command prompt
 
 ### How to use Git
 You need to setup an RSA key to be able to SSH into the git repository. 
@@ -47,7 +61,6 @@ Most importantly, ensure that SCLK and SDA pins are connected correctly onto the
 Adafruit Feather HUZZAH ESP8266
 ![Figure1-1 Embed Pinout](images/adafruit_products_pinbottom.jpg)
 
-
 ### Designated Sensor
 VNCL 4010 Datasheet
 
@@ -55,11 +68,3 @@ VNCL 4010 Datasheet
 The documentation for MQTT can be found [here](https://github.com/mqtt/mqtt.github.io). 
 This should be used as a basic message passing interface on top of the WiFi hardware.
 
-### Windows Setup
-General setup documentation can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
-
-To setup Micropython Read-Evaluate-Print Loop (REPL) can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/serial-terminal) 
-
-Drivers to install for windows for ESP8226 can be found [here] (https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx)
-
-Ampy failure troubleshoot can be found [here] (https://forum.micropython.org/viewtopic.php?t=2702) 
