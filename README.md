@@ -43,8 +43,8 @@ Most importantly, ensure that SCLK and SDA pins are connected correctly onto the
 
 ## Architecture
 
-### Embed
-Adafruit Feather HUZZAH ESP8266
+### Embed 
+Adafruit Feather HUZZAH ESP8266 PINOUT Diagram
 ![Figure1-1 Embed Pinout](images/adafruit_products_pinbottom.jpg)
 
 
