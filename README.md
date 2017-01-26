@@ -10,6 +10,8 @@ Repository for EE3-24 Embedded Systems Coursework 1
 So apparently there is an issue with Bash on Windows with regards to connecting to its serial ports.
 Follow the instructions [here](https://learn.adafruit.com/adafruit-feather-huzzah-esp8266/overview) for windows machines.
 
+Install python 2.7/3.6 for Windows, and install PuTTY in order to access the serial port.
+
 ### How to use Git
 You need to setup an RSA key to be able to SSH into the git repository. 
 Alternatively, you can clone the repository via HTTPS, which requires you so fill in your login details everytime you push something in.
