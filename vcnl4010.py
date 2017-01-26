@@ -28,7 +28,7 @@ class Sensor:
 		if self.first_read:
 			time.sleep_us(1470)
 			self.first_read = False
-			
+
 		combined = self.sensor.readfrom_mem(self.ID, self.DATA_ADD,4)
 		self.reading = bytearray(combined)
 
@@ -44,10 +44,15 @@ class Sensor:
 		hi <<= 8
 		return hi + lo
 
+	def getALS():
+		return self.getRawLight * 0.25
+
 def main():
 	sensor = Sensor()
 	readout = sensor.getRawLight()
 	print("Light sensor raw data reading:", readout)
+	readout = sensor.getALS()
+	print("Light sensor reading: %f lux" % (readout))
 	readout = sensor.getRawProx()
 	print("Proximity sensor raw data reading:",readout)
 
