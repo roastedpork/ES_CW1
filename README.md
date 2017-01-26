@@ -34,7 +34,7 @@ Datasheet for the microcontroller can be found [here](http://download.arduino.or
 There is no driver implementation for the microcontroller, which might require us to implement our own code for it. 
 
 ### Windows Setup for Interfacing
-General setup documentation can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
+General setup documentation to load Micropython into the board can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
 
 To setup Micropython Read-Evaluate-Print Loop (REPL) can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/serial-terminal) 
 
