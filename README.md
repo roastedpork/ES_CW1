@@ -92,6 +92,8 @@ Adafruit Feather HUZZAH ESP8266 PINOUT Diagram
 ### Designated Sensor
 
 A Sensor class for the Light and Proximity Sensor was created in vcnl4010.py, that is able to convert the reading from the sensor into a raw integer value.
+More applications of the VCNL4010 sensor can be found [here](http://www.vishay.com/docs/84138/designingvcnl4010.pdf).
+
 
 ### Interaction with server via WiFis using MQTT
 The documentation for MQTT can be found [here](https://github.com/mqtt/mqtt.github.io). 
