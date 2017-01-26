@@ -6,7 +6,7 @@ Repository for EE3-24 Embedded Systems Coursework 1
 
 + ~~Figure out how to interface the embed~~
 + ~~Figure out how to get the embed to communicate with the sensor~~
-+ Get proper raw measurements from the sensor
++ Get proper raw measurements from the sensor (WIP)
 + Convert raw data into a form that makes sense
 + Design an IoT application for the sensor
 
@@ -96,8 +96,3 @@ A Sensor class for the Light and Proximity Sensor was created in vcnl4010.py, th
 ### Interaction with server via WiFis using MQTT
 The documentation for MQTT can be found [here](https://github.com/mqtt/mqtt.github.io). 
 This should be used as a basic message passing interface on top of the WiFi hardware.
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 654abae2542495f8c04964c1e0a195c1b5af541a
