@@ -1,14 +1,14 @@
 from machine import Pin, I2C
+import vcnl4010
 import time
 
 def main():
-	led = Pin(0,Pin.OUT)
-	for i in range(10):
-		led.high()
-		time.sleep(1.0)
-		led.low()
-		time.sleep(1.0)
+	sensor = vcnl4010.Sensor()
+	sensor.takeReading()
+	readout = sensor.getRawLight()
 
+	with open("test.txt",'w') as file:
+		file.write(readout)
 
 if __name__ == "__main__":
 	main()
