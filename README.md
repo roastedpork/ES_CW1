@@ -45,6 +45,7 @@ Ampy failure troubleshoot can be found [here] (https://forum.micropython.org/vie
 Instructions for installing ampy can be found [here](https://github.com/adafruit/ampy).  
 The documentation for using I<sup>2</sup>C on the ESP8266 can be found [here](http://docs.micropython.org/en/latest/esp8266/library/machine.I2C.html). 
 
+Test script to check if setup successful
 ```python 
 import machine, time 
 led = machine.Pin(0,machine.Pin.OUT)
