@@ -4,7 +4,11 @@ Repository for EE3-24 Embedded Systems Coursework 1
 ## Prequisites for the coursework
 
 ### OS for Shell Terminal
-Install [Bash on Windows](http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/), or dual-boot a Linux VM for this coursework.
+
+~~Install [Bash on Windows](http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/), or dual-boot a Linux VM for this coursework.~~
+
+So apparently there is an issue with Bash on Windows with regards to connecting to its serial ports.
+Follow the instructions [here](https://learn.adafruit.com/adafruit-feather-huzzah-esp8266/overview) for windows machines.
 
 ### How to use Git
 You need to setup an RSA key to be able to SSH into the git repository. 
@@ -39,11 +43,11 @@ Most importantly, ensure that SCLK and SDA pins are connected correctly onto the
 
 ### Embed
 Adafruit Feather HUZZAH ESP8266
+![Figure1-1 Embed Pinout](images/adafruit_products_pinbottom.jpg)
 
 
 ### Designated Sensor
-
-![Figure1-1 Embed Pinout](images/adafruit_products_pinbottom.jpg)
+VNCL 4010 Datasheet
 
 ### Interaction with server via WiFis using MQTT
 The documentation for MQTT can be found [here](https://github.com/mqtt/mqtt.github.io). 
