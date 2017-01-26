@@ -60,6 +60,6 @@ General setup documentation can be found [here] (https://learn.adafruit.com/micr
 
 To setup Micropython Read-Evaluate-Print Loop (REPL) can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/serial-terminal) 
 
-Drivers to install for windows for ESP8226 can be found [here] (https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx)
+Drivers to install for windows for ESP8266 can be found [here] (https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx)
 
 Ampy failure troubleshoot can be found [here] (https://forum.micropython.org/viewtopic.php?t=2702) 
