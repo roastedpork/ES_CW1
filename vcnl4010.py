@@ -1,9 +1,9 @@
 import machine
 import time
-class Sensor:
-	def __init__(self):
+class ALPSensor:
+	def __init__(self, i2c_handler):
 		self.ID = 0x13
-		self.i2c = machine.I2C(scl = machine.Pin(5), sda = machine.Pin(4), freq = 100000)
+		self.i2c = i2c_handler
 
 		self.CMD_REG = 0x80			# Measurement enable bits
 		self.PROX_CONFIG = 0x82		# Rate of proximity measurement
@@ -48,7 +48,8 @@ class Sensor:
 		return self.getRawLight() * 0.25
 
 def main():
-	sensor = Sensor()
+	i2c = machine.I2C(scl = machine.Pin(5), sda = machine.Pin(4), freq = 100000)
+	sensor = ALPSensor(i2c)
 	readout = sensor.getRawLight()
 	print("Light sensor raw data reading:", readout)
 	readout = sensor.getALS()
