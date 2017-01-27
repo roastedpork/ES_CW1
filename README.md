@@ -104,7 +104,7 @@ For most intents and purposes, we would want to be able to read from/write to th
 For the VCNL4010, the registers are 0x80 to 0x90. 
 The exact details the function of each register can be found in the datasheet.
 
-##### Writing data to the device
+#### Writing data to the device
 In order to write a 1 byte data to the device, we first have to encode the data into a byte type.
 
 ```python
@@ -114,7 +114,7 @@ buffer = str(0xff).encode()			# Encode the value into a byte type first
 i2c.writeto_mem(0x13, 0x80, buffer)	# args passed as (device_add, mem_add, value)
 ```
 
-##### Reading data from the device
+#### Reading data from the device
 In order to read the data, we have to use a different method. 
 Once again we would be using the VCNL4010 as an example, where we are attempting to obtain the light and proximity readings. 
 
