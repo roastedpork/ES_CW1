@@ -45,7 +45,7 @@ class Sensor:
 		return hi + lo
 
 	def getALS():
-		return self.getRawLight * 0.25
+		return self.getRawLight() * 0.25
 
 def main():
 	sensor = Sensor()
