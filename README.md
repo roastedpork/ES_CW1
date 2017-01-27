@@ -83,6 +83,57 @@ while True:
 Refer to lecture 2 slides for specifics details of the interface. 
 Most importantly, ensure that SCLK and SDA pins are connected correctly onto the mbed. 
 
+#### How to use I<sup>2</sup>C in MicroPython
+
+After ensuring that the device is properly connected, a device can be instantiated using the following code (using VCNL4010 as an example):
+
+```python
+import machine
+
+i2c = machine.I2C(scl = machine.Pin(5), sda = machine.Pin(4), freq = 100000)
+```
+
+This creates an I<sup>2</sup>C object for the device to handle the pins.
+Every device has a specific device address that needs to be used to access its memory registers.
+This can be found from the datasheet of the device of interest, but if that is not possible the following code can be used to determine the address(es):
+```python
+print i2c.scan() # Outputs [19] when the VCNL4010 is connected
+```
+
+For most intents and purposes, we would want to be able to read from/write to the device's memory registers.
+For the VCNL4010, the registers are 0x80 to 0x90. 
+The exact details the function of each register can be found in the datasheet.
+
+##### Writing data to the device
+In order to write a 1 byte data to the device, we first have to encode the data into a byte type.
+
+```python
+# For VCNL4010, the device address is 0x13
+# We intend to write a 1 byte value of 0xff into the memory register at address 0x80
+buffer = str(0xff).encode()			# Encode the value into a byte type first			 
+i2c.writeto_mem(0x13, 0x80, buffer)	# args passed as (device_add, mem_add, value)
+```
+
+##### Reading data from the device
+In order to read the data, we have to use a different method. 
+Once again we would be using the VCNL4010 as an example, where we are attempting to obtain the light and proximity readings. 
+
+```python
+# Data memory registers are located from 0x85 to 0x88
+
+# args passed as (device_add, starting_mem_add, no_of_bytes_read)
+# 4 so that it reads 4 bytes starting from 085, ending at 0x88
+raw_bytes = i2c.readfrom_mem(0x13, 0x85 ,4) 
+
+# We need to convert this array of bytes into and array of int values by doing so
+converted_bytes = bytearray(raw_bytes) 
+
+# converted_bytes currently has 4 elements, [0] -> 0x85, [1]-> 0x86, [2] -> 0x87, [3] -> 0x88
+```
+
+Once we have converted the raw data into integer values, we can perform further processing in order to make sense of the data. 
+Refer to VCNL4010.py or to the datasheet on how to perform this. 
+
 ## Architecture
 
 ### Embed 
