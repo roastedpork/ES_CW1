@@ -4,11 +4,11 @@ Repository for EE3-24 Embedded Systems Coursework 1
 
 ## Current List of To Dos
 
-[x] Figure out how to interface the embed
-[x] Figure out how to get the embed to communicate with the sensor
-[ ] Get proper raw measurements from the sensor (WIP)
-[ ] Convert raw data into a form that makes sense
-[ ] Design an IoT application for the sensor
+- [x] Figure out how to interface the embed
+- [x] Figure out how to get the embed to communicate with the sensor
+- [ ] Get proper raw measurements from the sensor (WIP)
+- [ ] Convert raw data into a form that makes sense
+- [ ] Design an IoT application for the sensor
 	* Automated Light Control for light sensor
 	* CLOUD ROBOTICSSSSSSS
 ## Prequisites for the coursework
