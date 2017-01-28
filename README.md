@@ -11,6 +11,8 @@ Repository for EE3-24 Embedded Systems Coursework 1
 - [ ] Design an IoT application for the sensor
 	* Automated Light Control for light sensor
 	* CLOUD ROBOTICSSSSSSS
+
+
 ## Prequisites for the coursework
 
 ### Windows Setup
