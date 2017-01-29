@@ -12,6 +12,8 @@ Repository for EE3-24 Embedded Systems Coursework 1
 	* Automated Light Control for light sensor
 	* CLOUD ROBOTICSSSSSSS
 
+## Scoring breakdown
+![Breakdown](images/grading.PNG)
 
 ## Prequisites for the coursework
 
