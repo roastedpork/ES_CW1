@@ -2,7 +2,7 @@
 Repository for EE3-24 Embedded Systems Coursework 1
 
 
-## Current List of To Dos
+# Current List of To Dos
 
 - [x] Figure out how to interface the embed
 - [x] Figure out how to get the embed to communicate with the sensor
@@ -12,22 +12,22 @@ Repository for EE3-24 Embedded Systems Coursework 1
 	* Automated Light Control for light sensor
 	* CLOUD ROBOTICSSSSSSS
 
-## Scoring breakdown
+# Scoring breakdown
 ![Breakdown](images/grading.PNG)
 
-## Prequisites for the coursework
+# Prequisites for the coursework
 
-### Windows Setup
+## Windows Setup
 
 Install python 2.7/3.6 for Windows, and install PuTTY in order to access the serial port.
 
-General setup documentation can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
+General setup documentation can be found [here](https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
 
-To setup Micropython Read-Evaluate-Print Loop (REPL) can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/serial-terminal) 
+To setup Micropython Read-Evaluate-Print Loop (REPL) can be found [here](https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/serial-terminal) 
 
-Drivers to install for windows for ESP8226 can be found [here] (https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx)
+Drivers to install for windows for ESP8226 can be found [here](https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx)
 
-Ampy failure troubleshoot can be found [here] (https://forum.micropython.org/viewtopic.php?t=2702) 
+Ampy failure troubleshoot can be found [here](https://forum.micropython.org/viewtopic.php?t=2702) 
 
 In summary:
 + Python - To install relevant micropython packages
@@ -35,23 +35,23 @@ In summary:
 + PuTTY - To get a real-time output from the embed
 + ampy - File manager for the embed which can be accessed via Windows command prompt
 
-### ESP8266 WiFi Microcontroller
+## ESP8266 WiFi Microcontroller
 Datasheet for the microcontroller can be found [here](http://download.arduino.org/products/UNOWIFI/0A-ESP8266-Datasheet-EN-v4.3.pdf). 
 There is no driver implementation for the microcontroller, which might require us to implement our own code for it. 
 
-### Windows Setup for Interfacing
-General setup documentation to load Micropython into the board can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
+## Windows Setup for Interfacing
+General setup documentation to load Micropython into the board can be found [here](https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
 
-To setup Micropython Read-Evaluate-Print Loop (REPL) can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/serial-terminal) 
+To setup Micropython Read-Evaluate-Print Loop (REPL) can be found [here](https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/serial-terminal) 
 
-Drivers to install for windows for ESP8266 can be found [here] (https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx)
+Drivers to install for windows for ESP8266 can be found [here](https://www.silabs.com/products/mcu/Pages/USBtoUARTBridgeVCPDrivers.aspx)
 
-Ampy failure troubleshoot can be found [here] (https://forum.micropython.org/viewtopic.php?t=2702) 
+Ampy failure troubleshoot can be found [here](https://forum.micropython.org/viewtopic.php?t=2702) 
 
 Instructions for installing ampy can be found [here](https://github.com/adafruit/ampy).  
 The documentation for using I<sup>2</sup>C on the ESP8266 can be found [here](http://docs.micropython.org/en/latest/esp8266/library/machine.I2C.html). 
 
-#### Test script to check if setup successful:
+### Test script to check if setup successful:
 ```python 
 import machine, time 
 led = machine.Pin(0,machine.Pin.OUT)
@@ -62,11 +62,11 @@ while True:
 	time.sleep(1.0)
 ```
 
-### I<sup>2</sup>C Interface
+## I<sup>2</sup>C Interface
 Refer to lecture 2 slides for specifics details of the interface. 
 Most importantly, ensure that SCLK and SDA pins are connected correctly onto the mbed. 
 
-#### How to use I<sup>2</sup>C in MicroPython
+### How to use I<sup>2</sup>C in MicroPython
 
 After ensuring that the device is properly connected, a device can be instantiated using the following code (using VCNL4010 as an example):
 
@@ -87,7 +87,7 @@ For most intents and purposes, we would want to be able to read from/write to th
 For the VCNL4010, the registers are 0x80 to 0x90. 
 The exact details the function of each register can be found in the datasheet.
 
-#### Writing data to the device
+### Writing data to the device
 In order to write a 1 byte data to the device, we first have to encode the data into a byte type.
 
 ```python
@@ -97,7 +97,7 @@ buffer = str(0xff).encode()			# Encode the value into a byte type first
 i2c.writeto_mem(0x13, 0x80, buffer)	# args passed as (device_add, mem_add, value)
 ```
 
-#### Reading data from the device
+### Reading data from the device
 In order to read the data, we have to use a different method. 
 Once again we would be using the VCNL4010 as an example, where we are attempting to obtain the light and proximity readings. 
 
@@ -117,18 +117,18 @@ converted_bytes = bytearray(raw_bytes)
 Once we have converted the raw data into integer values, we can perform further processing in order to make sense of the data. 
 Refer to VCNL4010.py or to the datasheet on how to perform this. 
 
-## Architecture
+# Architecture
 
-### Embed 
+## Embed 
 Adafruit Feather HUZZAH ESP8266 PINOUT Diagram
 ![Figure1-1 Embed Pinout](images/adafruit_products_pinbottom.jpg)
 
-### Designated Sensor
+## Designated Sensor
 
 A Sensor class for the Light and Proximity Sensor was created in vcnl4010.py, that is able to convert the reading from the sensor into a raw integer value.
 More applications of the VCNL4010 sensor can be found [here](http://www.vishay.com/docs/84138/designingvcnl4010.pdf).
 
 
-### Interaction with server via WiFis using MQTT
+## Interaction with server via WiFis using MQTT
 The documentation for MQTT can be found [here](https://github.com/mqtt/mqtt.github.io). 
 This should be used as a basic message passing interface on top of the WiFi hardware.
