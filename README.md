@@ -19,11 +19,6 @@ Repository for EE3-24 Embedded Systems Coursework 1
 
 ### Windows Setup
 
-~~Install [Bash on Windows](http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/), or dual-boot a Linux VM for this coursework.~~
-
-So apparently there is an issue with Bash on Windows with regards to connecting to its serial ports.
-Follow the instructions [here](https://learn.adafruit.com/adafruit-feather-huzzah-esp8266/overview) for windows machines.
-
 Install python 2.7/3.6 for Windows, and install PuTTY in order to access the serial port.
 
 General setup documentation can be found [here] (https://learn.adafruit.com/micropython-basics-how-to-load-micropython-on-a-board/overview) 
@@ -39,23 +34,6 @@ In summary:
 + Serial driver - To allow PuTTY to work later on
 + PuTTY - To get a real-time output from the embed
 + ampy - File manager for the embed which can be accessed via Windows command prompt
-
-### How to use Git
-You need to setup an RSA key to be able to SSH into the git repository. 
-Alternatively, you can clone the repository via HTTPS, which requires you so fill in your login details everytime you push something in.
-
-#### Basic setup for Git 
-```
-sudo apt-get install git
-git clone https://github.com/roastedpork/ES_CW1.git
-```
-
-#### Commiting to Git
-```
-git add --all
-git commit -m "<insert your message here>"
-git push
-```
 
 ### ESP8266 WiFi Microcontroller
 Datasheet for the microcontroller can be found [here](http://download.arduino.org/products/UNOWIFI/0A-ESP8266-Datasheet-EN-v4.3.pdf). 
