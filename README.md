@@ -132,5 +132,7 @@ More applications of the VCNL4010 sensor can be found [here](http://www.vishay.c
 ## Interaction with server via WiFis using MQTT
 The documentation for MQTT sing MicroPython can be found [here](https://github.com/micropython/micropython-lib/tree/master/umqtt.simple). 
 This should be used as a basic message passing interface on top of the WiFi hardware.
+Implement SSL encryption for message passing (optional, but we are doing it)
 
-
++ Mosquitto - open source broker and clienet
++ Paho - Python implementation
