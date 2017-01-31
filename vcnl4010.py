@@ -44,7 +44,7 @@ class ALPSensor:
 		hi <<= 8
 		return hi + lo
 
-	def getALS(self):
+	def getALReading(self):
 		return self.getRawLight() * 0.25
 
 def main():
@@ -52,7 +52,7 @@ def main():
 	sensor = ALPSensor(i2c)
 	readout = sensor.getRawLight()
 	print("Light sensor raw data reading:", readout)
-	readout = sensor.getALS()
+	readout = sensor.getALReading()
 	print("Light sensor reading: %f lux" % (readout))
 	readout = sensor.getRawProx()
 	print("Proximity sensor raw data reading:", readout)
