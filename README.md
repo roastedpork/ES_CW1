@@ -131,8 +131,42 @@ More applications of the VCNL4010 sensor can be found [here](http://www.vishay.c
 
 ## Interaction with server via WiFis using MQTT
 The documentation for MQTT sing MicroPython can be found [here](https://github.com/micropython/micropython-lib/tree/master/umqtt.simple). 
-This should be used as a basic message passing interface on top of the WiFi hardware.
-Implement SSL encryption for message passing (optional, but we are doing it).
 
-+ Mosquitto - open source broker and clienet
-+ Paho - Python implementation
+MQTT is a message passing library that uses a publisher-subscriber framework, through a common broker server. 
+Each message can be labelled with a specific topic, which describes the type of messages being passed.
+MQTT is already available as a library of MicroPython, which can be used by doing `from umqtt.simple import MQTTClient`. 
+
+We would also need to install an MQTT implementation on our machines in order to subscribe to the topic. 
+We would be using Paho, which is a desktop implementation of MQTT.
+Install it by running the following code:
+
+```bash
+python pip install paho-mqtt
+```
+
+The MQTT code has been written under `publisher.py` and `subscriber.py`, which should be run on the embed and your machine respectively.
+An `MQTTWrapper` class has also been written for the embed under `publisher.py`, which handles the topic and connection with the MQTT broker.
+The following sections describes how the embed and laptops are programmed in order to achieve message passing.
+
+
+### Establishing an Internet Connection
+First, we have to manually configure our embed to connect with the WiFi.
+We do not have to do this on our laptops as we should be automatically connected to the internet.
+
+```python
+import network
+
+# This stops other machines from connecting to us
+ap_if = network.WLAN(network.AP_IF)
+ap_if.active(False)
+
+# This allows us to connect to the router
+sta_if = network.WLAN(network.STA_IF)
+sta_if.active(True)
+sta_if.connect('<essid>','<password>') # EEERover, exhibition for our labs
+``` 
+### MQTT Client
+For the publisher, `on_connect()` and `on_disconnect()` functions are required to be defined in the script.
+While for the subscriber, `on_connect()`, `on_disconnect()` and `on_message()` functions are required to be defined in the script.
+
+

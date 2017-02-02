@@ -16,14 +16,7 @@ class MQTTWrapper:
 		self.client.on_connect = on_connect
 		self.client.on_disconnect = on_disconnect
 		self.prefix = "esys/majulah/"
-		connected = False
-		while not connected:
-			try:
-				self.client.connect()
-				connected = True
-			except IndexError:
-				machine.reset()
-
+		self.client.connect()
 
 	def __del__(self):
 		self.client.disconnect()
