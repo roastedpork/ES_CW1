@@ -130,9 +130,9 @@ More applications of the VCNL4010 sensor can be found [here](http://www.vishay.c
 
 
 ## Interaction with server via WiFis using MQTT
-The documentation for MQTT sing MicroPython can be found [here](https://github.com/micropython/micropython-lib/tree/master/umqtt.simple). 
+The documentation for MQTT using MicroPython can be found [here](https://github.com/micropython/micropython-lib/tree/master/umqtt.simple). 
 
-MQTT is a message passing library that uses a publisher-subscriber framework, through a common broker server. 
+MQTT is a message-passing library that uses a publisher-subscriber framework, through a common broker server. 
 Each message can be labelled with a specific topic, which describes the type of messages being passed.
 MQTT is already available as a library of MicroPython, which can be used by doing `from umqtt.simple import MQTTClient`. 
 
