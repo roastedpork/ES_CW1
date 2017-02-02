@@ -134,10 +134,10 @@ The documentation for MQTT using MicroPython can be found [here](https://github.
 
 MQTT is a message-passing library that uses a publisher-subscriber framework, through a common broker server. 
 Each message can be labelled with a specific topic, which describes the type of messages being passed.
-MQTT is already available as a library of MicroPython, which can be used by doing `from umqtt.simple import MQTTClient`. 
+[MQTT](https://github.com/micropython/micropython-lib/tree/master/umqtt.simple) is already available as a library of MicroPython, which can be used by doing `from umqtt.simple import MQTTClient`. 
 
 We would also need to install an MQTT implementation on our machines in order to subscribe to the topic. 
-We would be using Paho, which is a desktop implementation of MQTT.
+We would be using [Paho](https://pypi.python.org/pypi/paho-mqtt/1.1#single, which is a desktop implementation of MQTT.
 Install it by running the following code:
 
 ```bash
