@@ -167,6 +167,38 @@ sta_if.connect('<essid>','<password>') # EEERover, exhibition for our labs
 ``` 
 ### MQTT Client
 For the publisher, `on_connect()` and `on_disconnect()` functions are required to be defined in the script.
-While for the subscriber, `on_connect()`, `on_disconnect()` and `on_message()` functions are required to be defined in the script.
+While for the subscriber, `on_connect()`, `on_disconnect()` and `on_message()` functions are required to be defined in the script. 
+These functions would be used as for callbacks, which would be activated when a certain event happens e.g. `on_connect()` would be called upon successfully connecting the embed to the broker and so on.
+All data processing on incoming messages should be written under `on_message()`.
+#### Publisher
+Refer to `publisher.py` for the exact implementation of the code.
+The basic setup for the publisher is as such:
 
+```python
+def on_connect(client, userdata, flags, rc):
+		print("Connection returned result: " + str(rc))
 
+def on_disconnect(client, userdata, rc):
+    if rc != 0:
+        print("Unexpected disconnection.")
+
+...
+
+client = MQTTClient(machine.unique_id(), broker_ip_add) # broker_ip_add for our lab is "192.168.0.10"
+
+client.on_connect = on_connect
+client.on_disconnect = on_disconnect
+client.connect()
+
+```
+
+After successfully setting up the publisher, it can publish data onto the broker as such:
+```python
+buffer = str(data).encode('utf-8') # This encodes the data into a byte array, using utf-8 encoding
+
+client.publish("<your_mom's_topic>", buffer)
+```
+
+#### Subscriber
+Refer to `subscriber.py` for the exact implementation of the code.
+The main thing to note is that `client.loop()` is called as a polling loop in order to detect for any incoming messages from the broker.
