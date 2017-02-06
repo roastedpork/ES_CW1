@@ -19,7 +19,6 @@ def on_message(client, userdata, message):
     print("Received message '" + str(message.payload) + "' on topic '"
         + message.topic + "' with QoS " + str(message.qos))
 
-
 class MQTTWrapper:
 	def __init__(self):
 		self.client = MQTTClient(machine.unique_id(), "192.168.0.10")
@@ -57,16 +56,16 @@ class MQTTWrapper:
 	def syncTime():
 		self.client.subscribe(self.prefix + "timesync")
 
-
 if __name__ == "__main__":
 	i2c = machine.I2C(scl = machine.Pin(5), sda = machine.Pin(4), freq = 100000)
 	sense = Sensor.ALPSensor(i2c)
 	client = MQTTWrapper()
 
+	timer = machine.RTC()
+	timer.alarm(0, 60000)
 
-	for i in range(10):
+	while timer.alarm_left() > 0:
 		timestamp = "%d-%d-%d_%d:%d:%d" % (time.localtime()[:6])
-		data = {"ambient": sense.getALReading(), "prox" : sense.getRawProx()}
-		buff = {"timestamp" : timestamp, "data" : data}
+		buff = {"timestamp" : timestamp, "ambient": sense.getALReading(), "prox" : sense.getRawProx()}
 		client.sendData('ambient', buff)
 		time.sleep(1)
