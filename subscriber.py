@@ -17,7 +17,7 @@ client.on_disconnect = on_disconnect
 client.on_message = on_message
 
 client.connect('192.168.0.10')
-client.subscribe('esys/majulah/ambient')
+client.subscribe('esys/majulah/ambient') #timesync') #
 # client.loop_start()
 
 while 1:
