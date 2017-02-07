@@ -20,8 +20,10 @@ def on_message(client, userdata, message):
 			writer.writeheader()
 			writer.writerow(cnvt)
 	else:
+		print("appending")
 		with open("log.csv", "ab") as csvfile:
-			writer = csv.DictWriter(csvfile)
+			fieldnames = cnvt.keys()
+			writer = csv.DictWriter(csvfile, fieldnames = fieldnames)
 			writer.writerow(cnvt)
 
 client = mqtt.Client()

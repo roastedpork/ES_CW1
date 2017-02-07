@@ -1,43 +1,6 @@
-import vcnl4010 as Sensor
-from umqtt.simple import MQTTClient
-import network
-import machine
+import datetime, csv, random
 
-def on_connect(client, userdata, flags, rc):
-		print("Connection returned result: "connack_string(rc))
-
-def on_disconnect(client, userdata, rc):
-    if rc != 0:
-        print("Unexpected disconnection.")
-
-class MQTTWrapper:
-	def __init__(self):
-		self.client = MQTTClient(machine.unique_id(), "192.168.0.10")
-		self.prefix = "esys/majulah/"
-		self.client.connect()
-
-		self.client.on_connect = on_connect
-		self.client.on_disconnect = on_disconnect
-
-	def sendData(self, topic = "", data = ""):
-		self.client.publish(self.prefix + topic, bytes(data, 'utf-8'))
-
-
-if __name__ == "__main__":
-	i2c = machine.I2C(scl = machine.Pin(5), sda = machine.Pin(4), freq = 100000)
-	sense = Sensor.ALPSensor(i2c)
-
-
-	# This stops other machines from connecting to us
-	ap_if = network.WLAN(network.AP_IF)
-	ap_if.active(False)
-
-	# This allows us to connect to the router
-	sta_if = network.WLAN(network.STA_IF)
-	sta_if.connect('EEERover','exhibition')
-
-	
-	client = MQTTWrapper()
-
-	for i in range(10):
-		client.sendData('ambient', sense.getALReading())
+data = {"timestamp" : datetime.datetime.now().isoformat("_"), "ambient" : random.gauss(10,5), "prox" : random.gauss(10,5)}
+with open("log.csv", "ab") as f:
+	writer = csv.DictWriter(f, fieldnames = data.keys())
+	writer.writerow(data)
