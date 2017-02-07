@@ -60,6 +60,7 @@ class ALPSensor:
 		readout =  self.getRawProx() - self.PROX_INF
 
 		return readout
+		
 def main():
 	i2c = machine.I2C(scl = machine.Pin(5), sda = machine.Pin(4), freq = 100000)
 	sensor = ALPSensor(i2c)

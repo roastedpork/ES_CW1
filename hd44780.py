@@ -1,8 +1,8 @@
 import machine
 import time
-class TempSensor:
+class LCD:
 	def __init__(self, id, i2c_handler):
-		self.ID = id
+		self.ID = 0x27
 		self.i2c = i2c_handler
 
 		self.REG_TDIE = 0x01

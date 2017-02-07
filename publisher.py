@@ -5,29 +5,27 @@ import machine, time, json
 
 
 # Interval Variables for embed, declared as global variables
-
 led = machine.Pin(0, machine.Pin.OUT)
 led.high()
 
 rtc = machine.RTC()
 
 
-# Callback function to process MQTT messages
+# Callback function to sync RTC via MQTT message
 def on_message(topic, msg):
-    print("Received message '" + str(msg) + "' on topic '"
-        + topic + "'")
-    timestamp = msg.split("_")
+    print("Received message '" + str(msg,'utf-8') + "' on topic '" + str(topic,'utf-8') + "'")
+    timestamp = str(msg,'utf-8').split("_")
     Y, M, D = [int(i) for i in timestamp[0].split("-")]
-    h, m, s = [int(i) for i in timestamp[1].split(":")]
-    rtc.init((Y,M,D,h,m,s))
-    print("Clock initialized to " + str(rtc.now()))
+    h, m, s = [int(i) for i in timestamp[1].split(".")[0].split(":")]
+    rtc.datetime((Y,M,D,0,h,m,s,0))
+    timestamp = "%d-%d-%d_%d:%d:%d" % (time.localtime()[:6])
+    print("Clock initialized to " + timestamp)
+
 # Custom MQTT Wrapper for our embed
 class MQTTWrapper:
 	def __init__(self):
-		self.client = MQTTClient(machine.unique_id(), "192.168.0.10")
-		# self.client.on_connect = on_connect
-		# self.client.on_disconnect = on_disconnect
-		self.client.on_message = on_message
+		self.client = MQTTClient(machine.unique_id(), "192.168.1.15")#"192.168.0.10")
+		self.client.set_callback(on_message)
 		self.prefix = "esys/majulah/"
 
 		# This stops other machines from connecting to us
@@ -37,7 +35,7 @@ class MQTTWrapper:
 		# This allows us to connect to the router
 		sta_if = network.WLAN(network.STA_IF)
 		sta_if.active(True)
-		sta_if.connect('EEERover','exhibition')  #'PLUSNET-6QTFPK','7dff6ec6df')#
+		sta_if.connect('PLUSNET-6QTFPK','7dff6ec6df')#'EEERover','exhibition')  #
 
 		connected = False
 		while not connected:
@@ -46,10 +44,10 @@ class MQTTWrapper:
 				connected = True
 				led.low()
 			except OSError:
-				# machine.reset()
+				machine.reset()
 				pass
 			except IndexError:
-				# machine.reset()
+				machine.reset()
 				pass
 
 	def __del__(self):
@@ -66,13 +64,15 @@ if __name__ == "__main__":
 	i2c = machine.I2C(scl = machine.Pin(5), sda = machine.Pin(4), freq = 100000)
 	sense = Sensor.ALPSensor(i2c)
 	client = MQTTWrapper()
-	client.syncTime()
+	# client.syncTime()
 
-	# timer = machine.RTC()
-	# timer.alarm(0, 60000)
+	timer = machine.RTC()
+	timer.alarm(0, 60000)
 
-	# while timer.alarm_left() > 0:
-	# 	timestamp = "%d-%d-%d_%d:%d:%d" % (time.localtime()[:6])
-	# 	buff = {"timestamp" : timestamp, "ambient": sense.getALReading(), "prox" : sense.getRawProx()}
-	# 	client.sendData('ambient', buff)
-	# 	time.sleep(1)
+	while timer.alarm_left() > 0:
+		timestamp = "%d-%d-%d_%d:%d:%d" % (time.localtime()[:6])
+		buff = {"timestamp" : timestamp, "ambient": sense.getALReading(), "prox" : sense.getRawProx()}
+		client.sendData('ambient', buff)
+		time.sleep(1)
+
+	del client
