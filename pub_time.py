@@ -1,5 +1,5 @@
 import paho.mqtt.client as mqtt
-import datetime, time
+import datetime, time, sys
 
 
 def on_connect(client, userdata, flags, rc):
@@ -13,7 +13,7 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 
-client.connect('192.168.0.10')
+client.connect(sys.argv[1])#'192.168.0.10')
 # client.subscribe('esys/majulah/ambient')
 client.loop_start()
 

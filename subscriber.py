@@ -1,5 +1,5 @@
 import paho.mqtt.client as mqtt
-import json, csv, os
+import json, csv, os, sys
 
 def on_connect(client, userdata, flags, rc):
 		print("Connection returned result: " + str(rc))#connack_string(rc))
@@ -15,15 +15,13 @@ def on_message(client, userdata, message):
 
 	if "log.csv" not in os.listdir(".."):
 		with open("log.csv", "wb") as csvfile:
-			fieldnames = cnvt.keys()
-			writer = csv.DictWriter(csvfile, fieldnames = fieldnames)
+			writer = csv.DictWriter(csvfile, fieldnames = cnvt.keys())
 			writer.writeheader()
 			writer.writerow(cnvt)
 	else:
 		print("appending")
 		with open("log.csv", "ab") as csvfile:
-			fieldnames = cnvt.keys()
-			writer = csv.DictWriter(csvfile, fieldnames = fieldnames)
+			writer = csv.DictWriter(csvfile, fieldnames = cnvt.keys())
 			writer.writerow(cnvt)
 
 client = mqtt.Client()
@@ -31,7 +29,7 @@ client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.on_message = on_message
 
-client.connect('192.168.0.10')
+client.connect(sys.argv[1]) # "192.168.1.1")#'192.168.0.10')
 client.subscribe('esys/majulah/ambient') #timesync') #
 # client.loop_start()
 

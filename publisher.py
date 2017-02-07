@@ -12,26 +12,21 @@ led.high()
 rtc = machine.RTC()
 
 
-# Callback functions to process MQTT messages
-def on_connect(client, userdata, flags, rc):
-		print("Connection returned result: " + str(rc))
-		led.low()
-
-def on_disconnect(client, userdata, rc):
-    if rc != 0:
-        print("Unexpected disconnection.")
-        led.high()
-
-def on_message(client, userdata, message):
-    print("Received message '" + str(message.payload) + "' on topic '"
-        + message.topic + "' with QoS " + str(message.qos))
-
+# Callback function to process MQTT messages
+def on_message(topic, msg):
+    print("Received message '" + str(msg) + "' on topic '"
+        + topic + "'")
+    timestamp = msg.split("_")
+    Y, M, D = [int(i) for i in timestamp[0].split("-")]
+    h, m, s = [int(i) for i in timestamp[1].split(":")]
+    rtc.init((Y,M,D,h,m,s))
+    print("Clock initialized to " + str(rtc.now()))
 # Custom MQTT Wrapper for our embed
 class MQTTWrapper:
 	def __init__(self):
 		self.client = MQTTClient(machine.unique_id(), "192.168.0.10")
-		self.client.on_connect = on_connect
-		self.client.on_disconnect = on_disconnect
+		# self.client.on_connect = on_connect
+		# self.client.on_disconnect = on_disconnect
 		self.client.on_message = on_message
 		self.prefix = "esys/majulah/"
 
@@ -49,6 +44,7 @@ class MQTTWrapper:
 			try:
 				self.client.connect()
 				connected = True
+				led.low()
 			except OSError:
 				# machine.reset()
 				pass
