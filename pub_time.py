@@ -9,6 +9,7 @@ def on_disconnect(client, userdata, rc):
     if rc != 0:
         print("Unexpected disconnection.")
 
+
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect

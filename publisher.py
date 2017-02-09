@@ -64,7 +64,7 @@ if __name__ == "__main__":
 	i2c = machine.I2C(scl = machine.Pin(5), sda = machine.Pin(4), freq = 100000)
 	sense = Sensor.ALPSensor(i2c)
 	client = MQTTWrapper()
-	# client.syncTime()
+	client.syncTime()
 
 	timer = machine.RTC()
 	timer.alarm(0, 60000)
@@ -74,5 +74,3 @@ if __name__ == "__main__":
 		buff = {"timestamp" : timestamp, "ambient": sense.getALReading(), "prox" : sense.getRawProx()}
 		client.sendData('ambient', buff)
 		time.sleep(1)
-
-	del client
