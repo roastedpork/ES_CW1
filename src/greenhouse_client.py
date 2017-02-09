@@ -1,5 +1,5 @@
 import paho.mqtt.client as mqtt
-import json, csv, os, sys, datetime
+import json, csv, os, sys, datetime, time
 
 def on_connect(client, userdata, flags, rc):
 		print("Connection returned result: " + str(rc))#connack_string(rc))
@@ -12,7 +12,6 @@ def on_message(client, userdata, message):
 	print("Received message '" + str(message.payload) + "' on topic '"
 	    + message.topic + "' with QoS " + str(message.qos))
 
-	client.disconnect()
 	
 	# if message.topic == "esys/majulah/ambient":
 	# 	cnvt = json.loads(message.payload)
@@ -41,14 +40,16 @@ while 1:
 
 	if cmd_in[:3] == "cmd":
 		cmd = cmd_in[4:].split(" ")
+		print("")
 		timestamp = datetime.datetime.now().isoformat("_")
 
 		data = {"timestamp": timestamp, "command" : cmd}
 		print(data)
-		client.loop_start()	
 		client.publish('esys/majulah/command', json.dumps(data).encode('utf-8'))
-		print("command published")
+		client.loop_start()	
 		client.subscribe('esys/majulah/response') 
+		time.sleep(1)
+		client.loop_stop()
 	elif cmd_in == "end":
 		break
 

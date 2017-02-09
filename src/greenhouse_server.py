@@ -16,7 +16,6 @@ rtc = machine.RTC()
 
 # Callback function to sync RTC via MQTT message
 def on_message(topic, msg):
-	led.low()
     # Process command based on message arguments
 	recv_data = json.loads(str(msg,'utf-8'))
 	resp = {}
@@ -92,27 +91,26 @@ class MQTTWrapper:
 				machine.reset()
 				pass
 
+		self.client.subscribe(self.prefix + 'command')
+
 	def __del__(self):
 		self.client.disconnect()
 
 	def sendData(self, topic = "", data = ""):
 		self.client.publish(self.prefix + topic, json.dumps(data).encode('utf-8'))
+		self.client.subscribe(self.prefix + 'command')
 
 	# Blocking implementation of the listening loop
 	def listenSync(self):
-		self.client.subscribe(self.prefix + 'command')
 		self.client.wait_msg()
 
 	# Non-blocking implementation of the listening loop
 	def listenAsync(self):
-		self.client.subscribe(self.prefix + 'command')
 		self.client.check_msg()
 
 client = MQTTWrapper()
 
 if __name__ == "__main__":
 
-	rtc.alarm(0, 600000)
-
-	while rtc.alarm_left() > 0:
+	while 1:
 		client.listenAsync()
