@@ -202,3 +202,7 @@ client.publish("<your_mom's_topic>", buffer)
 #### Subscriber
 Refer to `subscriber.py` for the exact implementation of the code.
 The main thing to note is that `client.loop()` is called as a polling loop in order to detect for any incoming messages from the broker.
+
+## Output Signal Configurations 
+### PWM controlled LED
+https://learn.adafruit.com/micropython-hardware-analog-i-o/pulse-width-modulation
