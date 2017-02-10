@@ -38,28 +38,28 @@ def on_message(topic, msg):
     
 
 # Specialized callback functions based on command given by client
-def topic_ambient():
+def cmd_ambient():
 	return alpsensor.getALReading()
 
-def topic_timesync(_timestamp):
+def cmd_timesync(_timestamp):
 	timestamp = _timestamp.split("_")
 	Y, M, D = [int(i) for i in timestamp[0].split("-")]
 	h, m, s = [int(i) for i in timestamp[1].split(".")[0].split(":")]
 	rtc.datetime((Y,M,D,0,h,m,s,0))
 	return "Success"
 
-def topic_prox():
+def cmd_prox():
 	return alpsensor.getProxReading()
 
-def topic_temp():
+def cmd_temp():
 	return tempsensor.read()
 
 # Mapping function for the different types of commands
 cmd_func_map = 	{
-				'ambient' : topic_ambient,
-				'timesync' : topic_timesync,
-				'prox' : topic_prox,
-				'temp' : topic_temp,
+				'ambient' : cmd_ambient,
+				'timesync' : cmd_timesync,
+				'prox' : cmd_prox,
+				'temp' : cmd_temp,
 				}
 
 # MQTT wrapper class
@@ -86,10 +86,10 @@ class MQTTWrapper:
 				led.low()
 			except OSError:
 				machine.reset()
-				pass
+
 			except IndexError:
 				machine.reset()
-				pass
+
 
 		self.client.subscribe(self.prefix + 'command')
 
@@ -113,4 +113,4 @@ client = MQTTWrapper()
 if __name__ == "__main__":
 
 	while 1:
-		client.listenAsync()
+		client.listenAsync() # Asynchronous means the embed to can perform other things while listening

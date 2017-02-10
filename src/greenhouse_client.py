@@ -12,18 +12,6 @@ def on_message(client, userdata, message):
 	print("Received message '" + str(message.payload) + "' on topic '"
 	    + message.topic + "' with QoS " + str(message.qos))
 
-	
-	# if message.topic == "esys/majulah/ambient":
-	# 	cnvt = json.loads(message.payload)
-	# 	if "log.csv" not in os.listdir("."):
-	# 		with open("log.csv", "wb") as csvfile:
-	# 			writer = csv.DictWriter(csvfile, fieldnames = cnvt.keys())
-	# 			writer.writeheader()
-	# 			writer.writerow(cnvt)
-	# 	else:
-	# 		with open("log.csv", "ab") as csvfile:
-	# 			writer = csv.DictWriter(csvfile, fieldnames = cnvt.keys())
-	# 			writer.writerow(cnvt)
 
 client = mqtt.Client()
 client.on_connect = on_connect
