@@ -6,6 +6,7 @@ led = machine.Pin(0, machine.Pin.OUT)
 led.high()
 
 # MQTT wrapper class
+# This class handles all the lower-level message passing details for our Huzzah
 class MQTTWrapper:
 	def __init__(self, _broker_ip, _ssid, _pw, _f):
 		self.client = MQTTClient(machine.unique_id(), _broker_ip) 
@@ -33,12 +34,13 @@ class MQTTWrapper:
 			except IndexError:
 				machine.reset()
 
-
+		# Subscribes our embed to listen any client messages
 		self.client.subscribe(self.prefix + 'command')
 
 	def __del__(self):
 		self.client.disconnect()
 
+	# Method to send data in JSON format and handles topic formatting
 	def sendData(self, topic = "", data = ""):
 		self.client.publish(self.prefix + topic, json.dumps(data).encode('utf-8'))
 		self.client.subscribe(self.prefix + 'command')
@@ -51,6 +53,7 @@ class MQTTWrapper:
 	def listenAsync(self):
 		self.client.check_msg()
 
+	# Sets callback function of the MQTT messages
 	def setCallback(f):
 		self.client.set_callback(_f)
 

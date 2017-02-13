@@ -1,5 +1,8 @@
 import machine
 import time
+
+
+# This class implements the methods to read from the TMP007 sensor
 class TempSensor:
 	def __init__(self, id, i2c_handler):
 		self.ID = id
@@ -8,6 +11,7 @@ class TempSensor:
 		self.REG_TDIE = 0x01
 
 	def read(self):
+		# Reading and conversion of bytes from I2C
 		combined = self.i2c.readfrom_mem(self.ID, self.REG_TDIE,2)
 		reading = bytearray(combined)
 
