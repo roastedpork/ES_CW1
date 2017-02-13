@@ -41,7 +41,7 @@ def on_message(client, userdata, message):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect(sys.argv[1])
+client.connect(sys.argv[1]) # port = 8883) #SSL implementation
 recv = False
 
 # Set of plant profiles available 

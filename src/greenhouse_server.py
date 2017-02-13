@@ -25,14 +25,14 @@ lcd = I2cLcd(i2c, 0x27, 2, 16)
 # lightingcontroller = 
 
 # Moving average buffers for measurements
-AL_buffer = MA.Buffer()
-prox_buffer = MA.Buffer()
-temp_buffer = MA.Buffer()
-humid_buffer = MA.Buffer()
-moist_buffer = MA.Buffer()
+ALbuffer = MA.Buffer()
+proxbuffer = MA.Buffer()
+tempbuffer = MA.Buffer()
+humidbuffer = MA.Buffer()
+moistbuffer = MA.Buffer()
 
 # curr desired profile settings for the greenhouse
-plant_settings =	{
+plantsettings =	{
 					'Profile' : 'basil',
 					'Light_low' : 1000,
 					'Light_upp' : 1200,
@@ -68,7 +68,7 @@ def on_message(topic, msg):
 	elif recv_data['type'] == "SET":
 		try:
 			_type, _value = recv_data['data']
-			plant_settings[_type] = _value
+			plantsettings[_type] = _value
 			resp['data']['set_resp'] = '"%s" parameter successfully changed to "%f"' % (_type,_value)
 		
 		except KeyError:
@@ -82,9 +82,9 @@ def on_message(topic, msg):
 		new_profile = recv_data['data']
 
 		# Check if the new profile only contains all the valid fields, changes profile if true
-		if set(plant_settings.keys()) == set(new_profile.keys()):
-			plant_settings = new_profile
-			resp['data']['profile_resp'] = 'Profile has been changed to "%s"' % (plant_settings['Profile'])
+		if set(plantsettings.keys()) == set(new_profile.keys()):
+			plantsettings = new_profile
+			resp['data']['profile_resp'] = 'Profile has been changed to "%s"' % (plantsettings['Profile'])
 
 		else:
 			resp['data']['profile_resp'] = 'Could not change the plant profile'
@@ -99,16 +99,16 @@ def on_message(topic, msg):
 
 # Specialized callback functions based on command given by client
 def readAmbient():
-	return AL_buffer.getMA()
+	return ALbuffer.getMA()
 
 def readProx():
-	return prox_buffer.getMA()
+	return proxbuffer.getMA()
 
 def readTemp():
-	return temp_buffer.getMA()
+	return tempbuffer.getMA()
 
 def readHumidity():
-	return humid_buffer.getMA()
+	return humidbuffer.getMA()
 
 def readMoisture():
 	pass
@@ -154,26 +154,27 @@ if __name__ == "__main__":
 		if rtc.alarm_left() <= 0:
 			
 			# Adds a new set of readings in the moving average buffers
-			AL_buffer.update(alpsensor.getALReading())
-			prox_buffer.update(alpsensor.getProxReading())
-			temp_buffer.update(tempsensor.read())
+			ALbuffer.update(alpsensor.getALReading())
+			proxbuffer.update(alpsensor.getProxReading())
+			tempbuffer.update(tempsensor.read())
 			humidsensor.measure()
-			humid_buffer.update(humidsensor.humidity())
+			humidbuffer.update(humidsensor.humidity())
 
 			# Changes LCD Display every 5 seconds
+			# LCD only shows current readings, not the profile thresholds
 			if count % 5 == 0:
 				state = next_print_state[state]
 				
 				if state == 'Profile':
-					value = plant_settings[state]
+					value = plantsettings[state]
 				elif state == 'Light':
-					value = str(round(AL_buffer.getMA(),2)) + " lux"
+					value = str(round(ALbuffer.getMA(),2)) + " lux"
 				elif state == 'Temp':
-					value = str(round(temp_buffer.getMA(),2)) + " degs"
+					value = str(round(tempbuffer.getMA(),2)) + " degs"
 				elif state == 'Humidity':
-					value = str(round(humid_buffer.getMA(),2)) + "%"
+					value = str(round(humidbuffer.getMA(),2)) + "%"
 				elif state == 'Moisture':
-					value = str(round(moist_buffer.getMA(),2))
+					value = str(round(moistbuffer.getMA(),2))
 
 
 				lcd.clear()
