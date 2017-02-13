@@ -18,6 +18,30 @@ rtc = machine.RTC()
 client = MQTTWrapper('192.168.0.10', 'EEERover', 'exhibition') #'192.168.1.15', 'PLUSNET-6QTFPK', '7dff6ec6df')
 client.setCallback(on_message)
 
+AL_buffer = Buffer()
+prox_buffer = Buffer()
+temp_buffer = Buffer()
+
+# Buffer class to implement a moving average filter for the input data
+# implements a FIFO queue for the inputs
+class Buffer:
+	def __init__(self, _period = 10):
+		self.buffer = [0.0 for i in range(_period)]
+
+	def getMA(self):
+		return sum(self.buffer)/len(self.buffer)
+
+	def update(self, _input):
+		self.buffer = [_input] +self.buffer[:-1]
+
+	def changeMAPeriod(self, _period):
+		if _period < len(self.buffer):
+			self.buffer = self.buffer[:_period]
+		elif _period > len(self.buffer):
+			self.buffer += [0 for i in range(_period - len(self.buffer))]
+
+
+
 # Callback function to sync RTC via MQTT message
 def on_message(topic, msg):
     # Process command based on message arguments
@@ -42,15 +66,15 @@ def on_message(topic, msg):
     
 
 # Specialized callback functions based on command given by client
-def cmd_ambient():
-	return alpsensor.getALReading()
-
 def cmd_timesync(_timestamp):
 	timestamp = _timestamp.split("_")
 	Y, M, D = [int(i) for i in timestamp[0].split("-")]
 	h, m, s = [int(i) for i in timestamp[1].split(".")[0].split(":")]
 	rtc.datetime((Y,M,D,0,h,m,s,0))
 	return "Success"
+
+def cmd_ambient():
+	return alpsensor.getALReading()
 
 def cmd_prox():
 	return alpsensor.getProxReading()
@@ -115,6 +139,13 @@ cmd_func_map = 	{
 # 		self.client.set_callback(f)
 
 if __name__ == "__main__":
-
+	rtc.alarm(0,1000)
 	while 1:
 		client.listenAsync() # Asynchronous means the embed to can perform other things while listening
+		
+		# Adds readings into buffers every 1 second
+		if rtc.alarm_left() <= 0:
+			AL_buffer.update(alpsensor.getALReading())
+			prox_buffer.update(alpsensor.getProxReading())
+			temp_buffer.update(tempsensor.read())
+			rtc.alarm(0,1000)
