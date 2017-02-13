@@ -46,8 +46,28 @@ recv = False
 
 # Set of plant profiles available 
 profiles = 	[
-			{ 'Profile' : 'basil', 'Light' : 1000, 'Temperature', 25, 'Humidity' : 75, 'Moisture' : 50},
-			{ 'Profile' : 'lavender', 'Light' : 700, 'Temperature', 20, 'Humidity' : 50, 'Moisture' : 72},
+			{
+					'Profile' : 'basil',
+					'Light_low' : 1000,
+					'Light_upp' : 1200,
+					'Temp_low', 25,
+					'Temp_upp', 28,
+					'Humidity_low' : 67,
+					'Humidity_upp' : 78,
+					'Moisture_low' : 200,
+					'Moisture_upp' : 500,
+			},
+			{
+					'Profile' : 'lavender',
+					'Light_low' : 650,
+					'Light_upp' : 800,
+					'Temp_low', 18,
+					'Temp_upp', 25,
+					'Humidity_low' : 44,
+					'Humidity_upp' : 56,
+					'Moisture_low' : 600,
+					'Moisture_upp' : 720,
+			},
 			]
 
 

@@ -29,14 +29,19 @@ AL_buffer = MA.Buffer()
 prox_buffer = MA.Buffer()
 temp_buffer = MA.Buffer()
 humid_buffer = MA.Buffer()
+moist_buffer = MA.Buffer()
 
-# Current desired profile settings for the greenhouse
+# curr desired profile settings for the greenhouse
 plant_settings =	{
 					'Profile' : 'basil',
-					'Light' : 1000,
-					'Temperature', 25,
-					'Humidity' : 75,
-					'Moisture' : 50,
+					'Light_low' : 1000,
+					'Light_upp' : 1200,
+					'Temp_low', 25,
+					'Temp_upp', 28,
+					'Humidity_low' : 67,
+					'Humidity_upp' : 78,
+					'Moisture_low' : 200,
+					'Moisture_upp' : 500,
 					}
 
 
@@ -47,7 +52,7 @@ def on_message(topic, msg):
 	resp = {'type' : recv_data['type'] + '_RESPONSE', 'data' = {}}
 
 	## Processes client message based on type of message
-	# If msg is a request for current data
+	# If msg is a request for curr data
 	if recv_data['type'] == 'READ':
 		for cmd in recv_data['data']:
 			try:
@@ -129,7 +134,8 @@ next_print_state = 	{
 					'Profile' : 'Light',
 					'Light' : 'Temp',
 					'Temp' : 'Humidity',
-					'Humidity' : "Profile",
+					'Humidity' : "Moisture",
+					"Moisture" : "Profile",
 					}
 
 
@@ -159,18 +165,23 @@ if __name__ == "__main__":
 				state = next_print_state[state]
 				
 				if state == 'Profile':
-					value = 'Basil'
+					value = plant_settings[state]
 				elif state == 'Light':
 					value = str(round(AL_buffer.getMA(),2)) + " lux"
 				elif state == 'Temp':
 					value = str(round(temp_buffer.getMA(),2)) + " degs"
 				elif state == 'Humidity':
 					value = str(round(humid_buffer.getMA(),2)) + "%"
+				elif state == 'Moisture':
+					value = str(round(moist_buffer.getMA(),2))
+
 
 				lcd.clear()
 				lcd.move_to(0,0)
 				lcd.putstr("%s: \n%s" %(state,value))
 
+
 			count += 1
 			rtc.alarm(0,1000)
 
+		## Control Loop goes here
