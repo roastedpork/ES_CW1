@@ -107,7 +107,7 @@ next_print_state = 	{
 
 if __name__ == "__main__":
 	rtc.alarm(0,1000)
-	state, value = next_print_state['Humidity']
+	state = next_print_state['Humidity']
 	while 1:
 		client.listenAsync() # Asynchronous means the embed to can perform other things while listening
 		
