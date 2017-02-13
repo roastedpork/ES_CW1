@@ -4,6 +4,7 @@ import MQTTWrapper
 from umqtt.simple import MQTTClient
 import network
 import machine, time, json, dht
+from esp8266_i2c_lcd import I2cLcd
 
 
 # Interval Variables for embed, declared as global variables
@@ -12,8 +13,8 @@ alpsensor = ALPSensor.ALPSensor(i2c)
 tempsensor = TempSensor.TempSensor(0x40, i2c)
 humidsensor = dht.DHT11(machine.Pin(13))
 rtc = machine.RTC()
-
-
+rtc1 = machine.RTC()
+lcd = I2cLcd(i2c, 0x27, 2, 16)
 
 # Buffer class to implement a moving average filter for the input data
 # implements a FIFO queue for the inputs
@@ -93,11 +94,26 @@ cmd_func_map = 	{
 
 client = MQTTWrapper.MQTTWrapper('192.168.1.15', 'PLUSNET-6QTFPK', '7dff6ec6df', on_message) #'192.168.0.10', 'EEERover', 'exhibition') #
 
+
+# Implementing printing state FSM
+next_print_state = 	{
+					'Profile' : 'Light',
+					'Light' : 'Temperature',
+					'Temperature' : 'Humidity',
+					'Humidity' : "Profile",
+					}
+
+
+
 if __name__ == "__main__":
 	rtc.alarm(0,1000)
+	state, value = next_print_state['Humidity']
 	while 1:
 		client.listenAsync() # Asynchronous means the embed to can perform other things while listening
 		
+
+
+
 		# # Adds readings into buffers every 1 second
 		if rtc.alarm_left() <= 0:
 			AL_buffer.update(alpsensor.getALReading())
@@ -105,4 +121,21 @@ if __name__ == "__main__":
 			temp_buffer.update(tempsensor.read())
 			humidsensor.measure()
 			humid_buffer.update(humidsensor.humidity())
+
+			state = next_print_state[state]
+			
+			if state == 'Profile':
+				value = 'Basil'
+			elif state == 'Light':
+				value = str(round(AL_buffer.getMA(),2))
+			elif state == 'Temperature':
+				value = str(round(temp_buffer.getMA(),2))
+			elif state == 'Humidity':
+				value = str(round(humid_buffer.getMA(),2))
+
+			lcd.clear()
+			lcd.move_to(0,0)
+			lcd.putstr("%s: \n%s" %(state,value))
+
 			rtc.alarm(0,1000)
+

@@ -38,9 +38,9 @@ while 1:
 		client.publish('esys/majulah/command', json.dumps(data).encode('utf-8'))
 		client.loop_start()	
 		client.subscribe('esys/majulah/response') 
-		time.sleep(1)
-		# while not recv:
-		# 	pass
+		# time.sleep(1)
+		while not recv:
+			pass
 		client.loop_stop()
 	elif cmd_in == "end":
 		break
