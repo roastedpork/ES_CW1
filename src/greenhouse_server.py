@@ -1,5 +1,6 @@
 import vcnl4010 as ALPSensor
 import tmp007 as TempSensor
+import MQTTWrapper
 from umqtt.simple import MQTTClient
 import network
 import machine, time, json
@@ -14,6 +15,9 @@ alpsensor = ALPSensor.ALPSensor(i2c)
 tempsensor = TempSensor.TempSensor(0x40, i2c)
 rtc = machine.RTC()
 
+client = MQTTWrapper('192.168.0.10', 'EEERover', 'exhibition') #'192.168.1.15', 'PLUSNET-6QTFPK', '7dff6ec6df')
+client.setCallback(on_message)
+
 # Callback function to sync RTC via MQTT message
 def on_message(topic, msg):
     # Process command based on message arguments
@@ -26,7 +30,7 @@ def on_message(topic, msg):
 				if cmd == 'timesync':
 					resp[cmd] = cmd_func_map[cmd](recv_data['timestamp'])
 				else:
-					resp[cmd] = cmd_func_map[cmd]()
+					resp[cmd] = cmd_func_map[cmd](	)
 
 			except KeyError:
 				pass
@@ -62,53 +66,53 @@ cmd_func_map = 	{
 				'temp' : cmd_temp,
 				}
 
-# MQTT wrapper class
-class MQTTWrapper:
-	def __init__(self):
-		self.client = MQTTClient(machine.unique_id(), "192.168.0.10") #"192.168.1.15") #
-		self.client.set_callback(on_message)
-		self.prefix = "esys/majulah/"
+# # MQTT wrapper class
+# class MQTTWrapper:
+# 	def __init__(self, _broker_ip, _ssid, _pw):
+# 		self.client = MQTTClient(machine.unique_id(), _broker_ip) 
+# 		self.prefix = "esys/majulah/"
 
-		# This stops other machines from connecting to us
-		ap_if = network.WLAN(network.AP_IF)
-		ap_if.active(False)
+# 		# This stops other machines from connecting to us
+# 		ap_if = network.WLAN(network.AP_IF)
+# 		ap_if.active(False)
 
-		# This allows us to connect to the router
-		sta_if = network.WLAN(network.STA_IF)
-		sta_if.active(True)
-		sta_if.connect('EEERover','exhibition')  #'PLUSNET-6QTFPK','7dff6ec6df')#
+# 		# This allows us to connect to the router
+# 		sta_if = network.WLAN(network.STA_IF)
+# 		sta_if.active(True)
+# 		sta_if.connect(_ssid, _pw)
 
-		connected = False
-		while not connected:
-			try:
-				self.client.connect()
-				connected = True
-				led.low()
-			except OSError:
-				machine.reset()
+# 		connected = False
+# 		while not connected:
+# 			try:
+# 				self.client.connect()
+# 				connected = True
+# 				led.low()
+# 			except OSError:
+# 				machine.reset()
 
-			except IndexError:
-				machine.reset()
+# 			except IndexError:
+# 				machine.reset()
 
 
-		self.client.subscribe(self.prefix + 'command')
+# 		self.client.subscribe(self.prefix + 'command')
 
-	def __del__(self):
-		self.client.disconnect()
+# 	def __del__(self):
+# 		self.client.disconnect()
 
-	def sendData(self, topic = "", data = ""):
-		self.client.publish(self.prefix + topic, json.dumps(data).encode('utf-8'))
-		self.client.subscribe(self.prefix + 'command')
+# 	def sendData(self, topic = "", data = ""):
+# 		self.client.publish(self.prefix + topic, json.dumps(data).encode('utf-8'))
+# 		self.client.subscribe(self.prefix + 'command')
 
-	# Blocking implementation of the listening loop
-	def listenSync(self):
-		self.client.wait_msg()
+# 	# Blocking implementation of the listening loop
+# 	def listenSync(self):
+# 		self.client.wait_msg()
 
-	# Non-blocking implementation of the listening loop
-	def listenAsync(self):
-		self.client.check_msg()
+# 	# Non-blocking implementation of the listening loop
+# 	def listenAsync(self):
+# 		self.client.check_msg()
 
-client = MQTTWrapper()
+# 	def setCallback(f):
+# 		self.client.set_callback(f)
 
 if __name__ == "__main__":
 

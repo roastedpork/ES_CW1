@@ -11,12 +11,14 @@ def on_disconnect(client, userdata, rc):
 def on_message(client, userdata, message):
 	print("Received message '" + str(message.payload) + "' on topic '"
 	    + message.topic + "' with QoS " + str(message.qos))
-
+	recv = True
 
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.on_message = on_message
+recv = False
+
 
 # topics = [('esys/majulah/ambient',0), ('esys/majulah/timesync',0)]
 
@@ -25,7 +27,7 @@ client.connect(sys.argv[1])
 while 1:
 	print("Enter command:")
 	cmd_in = raw_input()
-
+	recv = False
 	if cmd_in[:3] == "cmd":
 		cmd = cmd_in[4:].split(" ")
 		print("")
@@ -36,7 +38,9 @@ while 1:
 		client.publish('esys/majulah/command', json.dumps(data).encode('utf-8'))
 		client.loop_start()	
 		client.subscribe('esys/majulah/response') 
-		time.sleep(1)
+		# time.sleep(1)
+		while not recv:
+			pass
 		client.loop_stop()
 	elif cmd_in == "end":
 		break
