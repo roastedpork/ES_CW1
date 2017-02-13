@@ -2,11 +2,15 @@ from umqtt.simple import MQTTClient
 import network
 import machine, time, json
 
+led = machine.Pin(0, machine.Pin.OUT)
+led.high()
+
 # MQTT wrapper class
 class MQTTWrapper:
-	def __init__(self, _broker_ip, _ssid, _pw):
+	def __init__(self, _broker_ip, _ssid, _pw, _f):
 		self.client = MQTTClient(machine.unique_id(), _broker_ip) 
 		self.prefix = "esys/majulah/"
+		self.client.set_callback(_f)
 
 		# This stops other machines from connecting to us
 		ap_if = network.WLAN(network.AP_IF)
@@ -16,7 +20,7 @@ class MQTTWrapper:
 		sta_if = network.WLAN(network.STA_IF)
 		sta_if.active(True)
 		sta_if.connect(_ssid, _pw)
-
+		led.low()
 		connected = False
 		while not connected:
 			try:
@@ -48,4 +52,7 @@ class MQTTWrapper:
 		self.client.check_msg()
 
 	def setCallback(f):
-		self.client.set_callback(f)
+		self.client.set_callback(_f)
+
+if __name__ == "__main__":
+	pass

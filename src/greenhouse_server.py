@@ -3,24 +3,17 @@ import tmp007 as TempSensor
 import MQTTWrapper
 from umqtt.simple import MQTTClient
 import network
-import machine, time, json
+import machine, time, json, dht
 
 
 # Interval Variables for embed, declared as global variables
-led = machine.Pin(0, machine.Pin.OUT)
-led.high()
-
 i2c = machine.I2C(scl = machine.Pin(5), sda = machine.Pin(4), freq = 100000)
 alpsensor = ALPSensor.ALPSensor(i2c)
 tempsensor = TempSensor.TempSensor(0x40, i2c)
+humidsensor = dht.DHT11(machine.Pin(13))
 rtc = machine.RTC()
 
-client = MQTTWrapper('192.168.0.10', 'EEERover', 'exhibition') #'192.168.1.15', 'PLUSNET-6QTFPK', '7dff6ec6df')
-client.setCallback(on_message)
 
-AL_buffer = Buffer()
-prox_buffer = Buffer()
-temp_buffer = Buffer()
 
 # Buffer class to implement a moving average filter for the input data
 # implements a FIFO queue for the inputs
@@ -40,7 +33,10 @@ class Buffer:
 		elif _period > len(self.buffer):
 			self.buffer += [0 for i in range(_period - len(self.buffer))]
 
-
+AL_buffer = Buffer()
+prox_buffer = Buffer()
+temp_buffer = Buffer()
+humid_buffer = Buffer()
 
 # Callback function to sync RTC via MQTT message
 def on_message(topic, msg):
@@ -54,7 +50,7 @@ def on_message(topic, msg):
 				if cmd == 'timesync':
 					resp[cmd] = cmd_func_map[cmd](recv_data['timestamp'])
 				else:
-					resp[cmd] = cmd_func_map[cmd](	)
+					resp[cmd] = cmd_func_map[cmd]()
 
 			except KeyError:
 				pass
@@ -74,13 +70,17 @@ def cmd_timesync(_timestamp):
 	return "Success"
 
 def cmd_ambient():
-	return alpsensor.getALReading()
+	return AL_buffer.getMA()
 
 def cmd_prox():
-	return alpsensor.getProxReading()
+	return prox_buffer.getMA()
 
 def cmd_temp():
-	return tempsensor.read()
+	return temp_buffer.getMA()
+
+def cmd_humidity():
+	return humid_buffer.getMA()
+
 
 # Mapping function for the different types of commands
 cmd_func_map = 	{
@@ -88,64 +88,21 @@ cmd_func_map = 	{
 				'timesync' : cmd_timesync,
 				'prox' : cmd_prox,
 				'temp' : cmd_temp,
+				'humid' : cmd_humidity,
 				}
 
-# # MQTT wrapper class
-# class MQTTWrapper:
-# 	def __init__(self, _broker_ip, _ssid, _pw):
-# 		self.client = MQTTClient(machine.unique_id(), _broker_ip) 
-# 		self.prefix = "esys/majulah/"
-
-# 		# This stops other machines from connecting to us
-# 		ap_if = network.WLAN(network.AP_IF)
-# 		ap_if.active(False)
-
-# 		# This allows us to connect to the router
-# 		sta_if = network.WLAN(network.STA_IF)
-# 		sta_if.active(True)
-# 		sta_if.connect(_ssid, _pw)
-
-# 		connected = False
-# 		while not connected:
-# 			try:
-# 				self.client.connect()
-# 				connected = True
-# 				led.low()
-# 			except OSError:
-# 				machine.reset()
-
-# 			except IndexError:
-# 				machine.reset()
-
-
-# 		self.client.subscribe(self.prefix + 'command')
-
-# 	def __del__(self):
-# 		self.client.disconnect()
-
-# 	def sendData(self, topic = "", data = ""):
-# 		self.client.publish(self.prefix + topic, json.dumps(data).encode('utf-8'))
-# 		self.client.subscribe(self.prefix + 'command')
-
-# 	# Blocking implementation of the listening loop
-# 	def listenSync(self):
-# 		self.client.wait_msg()
-
-# 	# Non-blocking implementation of the listening loop
-# 	def listenAsync(self):
-# 		self.client.check_msg()
-
-# 	def setCallback(f):
-# 		self.client.set_callback(f)
+client = MQTTWrapper.MQTTWrapper('192.168.1.15', 'PLUSNET-6QTFPK', '7dff6ec6df', on_message) #'192.168.0.10', 'EEERover', 'exhibition') #
 
 if __name__ == "__main__":
 	rtc.alarm(0,1000)
 	while 1:
 		client.listenAsync() # Asynchronous means the embed to can perform other things while listening
 		
-		# Adds readings into buffers every 1 second
+		# # Adds readings into buffers every 1 second
 		if rtc.alarm_left() <= 0:
 			AL_buffer.update(alpsensor.getALReading())
 			prox_buffer.update(alpsensor.getProxReading())
 			temp_buffer.update(tempsensor.read())
+			humidsensor.measure()
+			humid_buffer.update(humidsensor.humidity())
 			rtc.alarm(0,1000)
