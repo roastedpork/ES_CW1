@@ -1,7 +1,6 @@
-import machine, dht
+import gc
 
-d = dht.DHT11(machine.Pin(13))
-
-d.measure()
-
-print("humidity :", d.humidity())
+gc.enable()
+gc.collect()
+print(gc.mem_alloc())
+print(gc.mem_free())

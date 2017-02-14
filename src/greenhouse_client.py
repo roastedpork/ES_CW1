@@ -13,8 +13,12 @@ def on_message(client, userdata, message):
 
 	if response['type'] == 'READ_RESPONSE':
 		print("Current readings from the greenhouse")
-		for k,v in sorted(response['data'].items()):
-			print("%s: %.2f" * (k,v)) 
+		try:
+			for k,v in sorted(response['data'].items()):
+					print("%s: %.2f" % (k,v))
+		except TypeError:
+			print response['data']
+
 		print("")
 
 	elif response['type'] == 'SET_RESPONSE':
@@ -29,20 +33,25 @@ def on_message(client, userdata, message):
 		print(response['data']['profile_resp'])
 		print("")
 
+	elif response['type'] == 'SHUTDOWN_RESPONSE':
+		print(response['data'])
+		print("")
+
 	elif response['type'] == 'WARNING':
-		pass
+		print("WARNING: " + response['data'])
+
+	elif response['type'] == 'NOTIFICATION':
+		print("NOTE: " + response['data'])
 
 	elif response['type'] == 'ACTION':
-		pass
+		print("ACTION: " + response['data'])
 
-	recv = True
 
 # Setting up client-side MQTT handler
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 client.connect(sys.argv[1]) # port = 8883) #SSL implementation
-recv = False
 
 # Set of plant profiles available 
 profiles = 	[
@@ -50,33 +59,35 @@ profiles = 	[
 					'Profile' : 'basil',
 					'Light_low' : 1000,
 					'Light_upp' : 1200,
-					'Temp_low', 25,
-					'Temp_upp', 28,
+					'Temp_low': 25,
+					'Temp_upp': 28,
 					'Humidity_low' : 67,
 					'Humidity_upp' : 78,
 					'Moisture_low' : 200,
 					'Moisture_upp' : 500,
+					'Shutdown' : 0,
 			},
 			{
 					'Profile' : 'lavender',
 					'Light_low' : 650,
 					'Light_upp' : 800,
-					'Temp_low', 18,
-					'Temp_upp', 25,
+					'Temp_low': 18,
+					'Temp_upp': 25,
 					'Humidity_low' : 44,
 					'Humidity_upp' : 56,
 					'Moisture_low' : 600,
 					'Moisture_upp' : 720,
+					'Shutdown' : 0,
 			},
 			]
 
 
-
+client.loop_start()	
+client.subscribe('esys/majulah/response') 
 # Polling loop for user input
 while 1:
 	print("Enter command:")
 	cmd_in = raw_input().lower()
-	sent = True
 	recv = False
 	timestamp = datetime.datetime.now().isoformat("_")
 
@@ -106,7 +117,6 @@ while 1:
 
 		# Else prompts an error message
 		else:
-			sent = False
 			print("This plant setting is currently unavailable")
 
 	# If user wants to set the time on the embed
@@ -120,21 +130,18 @@ while 1:
 		regex = re.search('set (\w+) (\d+[\.[\d]+]?)', cmd_in)
 		try:
 			_type, _value = regex.groups()
+			_type = _type[0].upper() + _type[1:]
 			data = {"timestamp": timestamp, 'type': 'SET', 'data' : (_type, float(_value))}
 			print(data)
 			client.publish('esys/majulah/command', json.dumps(data).encode('utf-8'))
 
 		except ValueError:
-			sent = False
 			print("Please enter a float value")
 
+	elif cmd_in == "shutdown":
+		data = {"timestamp": timestamp, 'type': 'SHUTDOWN'}
+		print(data)
+		client.publish('esys/majulah/command', json.dumps(data).encode('utf-8'))
 	# If user wants to end the client
 	elif cmd_in == "end":
 		break
-
-	if sent:
-		client.loop_start()	
-		client.subscribe('esys/majulah/response') 
-		while not recv:
-			pass
-		client.loop_stop()
