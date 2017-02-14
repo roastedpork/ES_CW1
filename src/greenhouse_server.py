@@ -73,7 +73,7 @@ def send_msg(_type, _str):
 	timestamp = "%d-%d-%d_%d:%d:%d" % (time.localtime()[:6])
 	msg = {'timestamp' : timestamp, 'type' : _type }
 	msg['data'] = _str
-	client.sendData("response", _msg)
+	client.sendData("response", msg)
 
 ## Main Function!
 if __name__ == "__main__":
@@ -100,7 +100,7 @@ if __name__ == "__main__":
 			var.ALbuffer.update(var.alpsensor.getALReading())
 			var.proxbuffer.update(var.alpsensor.getProxReading())
 			var.tempbuffer.update(var.tempsensor.read())
-			var.humidsensor.measure()n
+			var.humidsensor.measure()
 			var.humidbuffer.update(var.humidsensor.humidity())
 			var.moistbuffer.update(var.moistsensor.read())
 
@@ -110,7 +110,7 @@ if __name__ == "__main__":
 				state = var.next_print_state[state]
 				
 				if state == 'Profile':
-					value = var.plantsettigs[state]
+					value = var.plantsettings[state]
 				elif state == 'Light':
 					value = str(round(var.ALbuffer.getMA(),2)) + " lux"
 				elif state == 'Temp':
