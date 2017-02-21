@@ -79,6 +79,18 @@ profiles = 	[
 					'Moisture_upp' : 720,
 					'Shutdown' : 0,
 			},
+			{
+					'Profile' : 'dill',
+					'Light_low' : 100,
+					'Light_upp' : 1000,
+					'Temp_low': 18,
+					'Temp_upp': 28,
+					'Humidity_low' : 15,
+					'Humidity_upp' : 30,
+					'Moisture_low' : 400,
+					'Moisture_upp' : 650,
+					'Shutdown' : 0,
+			},
 			]
 
 
@@ -127,7 +139,7 @@ while 1:
 
 	# If user wants to set a specific target parameter for the greenhouse to maintain
 	elif cmd_in[:3] == "set":
-		regex = re.search('set (\w+) (\d+[\.[\d]+]?)', cmd_in)
+		regex = re.search('set ([a-zA-Z0-9_]+) (\d+[\.[\d]+]?)', cmd_in)
 		try:
 			_type, _value = regex.groups()
 			_type = _type[0].upper() + _type[1:]
